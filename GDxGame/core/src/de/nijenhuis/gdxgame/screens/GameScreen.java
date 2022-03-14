@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import de.nijenhuis.gdxgame.Entity;
 import de.nijenhuis.gdxgame.GDxGame;
 import de.nijenhuis.gdxgame.Inventory;
+import de.nijenhuis.gdxgame.Item;
 import de.nijenhuis.gdxgame.PlayerInputProcessor;
 import de.nijenhuis.gdxgame.Player;
 
@@ -148,7 +149,10 @@ public class GameScreen implements Screen {
         Inventory hotbar = player.getHotbar();
         Texture slotTexture = hotbar.getSlotTexture();
         for(int i = 0; i < hotbar.getSize(); i++) {
-            batch.draw(slotTexture, 100 + i * (slotTexture.getWidth() + 16 ), 100);
+            batch.draw(slotTexture, 16 + i * (slotTexture.getWidth() + 16 ), 16);
+            if(hotbar.getItem(i) != null) {
+                batch.draw(hotbar.getItemTexture(i), 16 + i * (slotTexture.getWidth() + 16 ), 16);
+            }
         }
     }
     

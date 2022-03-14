@@ -22,6 +22,7 @@ public class Player extends Character {
         super(100, 250f, pTexture, new Rectangle(400, 240, 32, 32));
         inventory = new Inventory(27);
         hotbar = new Inventory(5);
+        hotbar.setItem(1, new Item(0));
     }
     
     public Inventory getHotbar() {
