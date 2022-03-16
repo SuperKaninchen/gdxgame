@@ -14,9 +14,10 @@ public class Item {
     private Texture texture;
     private int id;
     private String name;
+    private static JSONObject itemData;
     
     public Item(int pId) {
-        
+        id = pId;
     }
 
     

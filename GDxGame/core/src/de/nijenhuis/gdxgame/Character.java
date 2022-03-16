@@ -28,6 +28,17 @@ public class Character extends Entity {
         movementInput = Vector2.Zero;
     }
     
+    public void damage(float damage) {
+        health -= damage;
+        if(health <= 0) {
+            die();
+        }
+    }
+    
+    private void die() {
+        
+    }
+    
     public void setHorizontalMovement(int input) {
         movementInput.x = input;
     }
@@ -46,6 +57,14 @@ public class Character extends Entity {
                 movementInput.y * speed * m
         );
         setVelocity(newVelocity);
+    }
+    
+    public Item getEquipped() {
+        return equipped;
+    }
+    
+    public void setEquipped(Item pEquipped) {
+        equipped = pEquipped;
     }
     
 }

@@ -18,6 +18,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
+import de.nijenhuis.gdxgame.Character;
+import static de.nijenhuis.gdxgame.Constants.HEIGHT;
+import static de.nijenhuis.gdxgame.Constants.WIDTH;
 import de.nijenhuis.gdxgame.Entity;
 import de.nijenhuis.gdxgame.GDxGame;
 import de.nijenhuis.gdxgame.Inventory;
@@ -49,7 +52,7 @@ public class GameScreen implements Screen {
 
         // Setting up camera and rendering
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 480);
+        camera.setToOrtho(false, WIDTH, HEIGHT);
         batch = new SpriteBatch();
         cameraPosition = Vector2.Zero;
 
@@ -76,7 +79,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        
+
         // Clear the screen and set up rendering
         ScreenUtils.clear(0, 0, 0.2f, 1);
         camera.update();
@@ -92,8 +95,7 @@ public class GameScreen implements Screen {
         renderEntities();
         renderHUD();
         batch.end();
-        
-        
+
         // Move camera to player
         moveCamera();
 
@@ -102,7 +104,7 @@ public class GameScreen implements Screen {
         player.move(delta);
         moveEntities(delta);
     }
-    
+
     private void moveCamera() {
         camera.translate(
                 player.getX() - cameraPosition.x,
@@ -113,49 +115,59 @@ public class GameScreen implements Screen {
                 player.getY()
         );
     }
-    
+
     private void renderEntities() {
         Vector2 offset = new Vector2(
                 400 - player.getX(),
                 240 - player.getY()
         );
-        
+
         for (Entity e : entities) {
-            e.setRectangle(new Rectangle(
-                    e.getX() + offset.x,
-                    e.getY() + offset.y,
-                    e.getRectangle().width,
-                    e.getRectangle().height
-            ));
-            batch.draw(e.getTexture(), e.getRX(), e.getRY());
+            renderEntity(e, offset);
         }
     }
-    
-    private void renderPlayer() {
-        batch.draw(player.getTexture(), player.getRX(), player.getRY());
-    }
-    
-    private void moveEntities(float delta) {
-        for(Entity e : entities) {
-            e.move(delta);
-        }
-    }
-    
-    private void renderHUD() {
-        renderHotbar();
-    }
-    
-    private void renderHotbar() {
-        Inventory hotbar = player.getHotbar();
-        Texture slotTexture = hotbar.getSlotTexture();
-        for(int i = 0; i < hotbar.getSize(); i++) {
-            batch.draw(slotTexture, 16 + i * (slotTexture.getWidth() + 16 ), 16);
-            if(hotbar.getItem(i) != null) {
-                batch.draw(hotbar.getItemTexture(i), 16 + i * (slotTexture.getWidth() + 16 ), 16);
+
+    private void renderEntity(Entity e, Vector2 offset) {
+        e.setRectangle(new Rectangle(
+                e.getX() + offset.x,
+                e.getY() + offset.y,
+                e.getRectangle().width,
+                e.getRectangle().height
+        ));
+        batch.draw(e.getTexture(), e.getRX(), e.getRY());
+        if(e.getClass() == Character.class) {
+            Item equipped = ((Character) (e)).getEquipped();
+            if(equipped != null) {
+                batch.draw(equipped.getTexture(), e.getRX() + 24, e.getRY());
             }
         }
     }
-    
+
+    private void renderPlayer() {
+        batch.draw(player.getTexture(), player.getRX(), player.getRY());
+    }
+
+    private void moveEntities(float delta) {
+        for (Entity e : entities) {
+            e.move(delta);
+        }
+    }
+
+    private void renderHUD() {
+        renderHotbar();
+    }
+
+    private void renderHotbar() {
+        Inventory hotbar = player.getHotbar();
+        Texture slotTexture = hotbar.getSlotTexture();
+        for (int i = 0; i < hotbar.getSize(); i++) {
+            batch.draw(slotTexture, i * slotTexture.getWidth(), 0);
+            if (hotbar.getItem(i) != null) {
+                batch.draw(hotbar.getItemTexture(i), i * slotTexture.getWidth() + 32, 32, 64, 64);
+            }
+        }
+    }
+
     @Override
     public void dispose() {
         batch.dispose();

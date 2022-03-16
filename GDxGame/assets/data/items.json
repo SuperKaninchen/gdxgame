@@ -1,8 +1,14 @@
-{
-	"item": {
+[
+	{
 		"id": 0,
 		"name": "devitem",
 		"title": "Allmighty Dev-Item"
+	},
+	{
+		"id": 1,
+		"name": "sword",
+		"title": "Basic sword",
+		"type": 1,
+		"damage": 12.5
 	}
-}
-
+]

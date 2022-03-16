@@ -23,6 +23,7 @@ public class Player extends Character {
         inventory = new Inventory(27);
         hotbar = new Inventory(5);
         hotbar.setItem(1, new Item(0));
+        super.setEquipped(new Item(0));
     }
     
     public Inventory getHotbar() {
