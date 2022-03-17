@@ -76,6 +76,10 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(inputProcessor);
 
     }
+    
+    public Array<Entity> getEntities() {
+        return entities;
+    }
 
     @Override
     public void render(float delta) {

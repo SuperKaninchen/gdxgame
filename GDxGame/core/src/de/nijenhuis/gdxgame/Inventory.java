@@ -17,13 +17,15 @@ public class Inventory {
     
     private int size;
     private Item[] slots;
-    private Texture slotTexture;
+    private static Texture slotTexture;
     private JsonValue jsonObject;
     
     public Inventory(int pSize) {
         size = pSize;
         slots = new Item[pSize];
-        slotTexture = new Texture(Gdx.files.internal("slot.png"));
+        if(slotTexture == null) {
+            slotTexture = new Texture(Gdx.files.internal("slot.png"));
+        }
     }
 
     public int getSize() {

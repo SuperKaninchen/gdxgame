@@ -19,6 +19,7 @@ public class Character extends Entity {
     private float speed;
     private Vector2 movementInput;
     private Item equipped;
+    private Rectangle attackArea;
     
     public Character(int pMaxHealth, float pSpeed, Texture pTexture, Rectangle pRect) {
         super(pTexture, pRect);
@@ -26,6 +27,7 @@ public class Character extends Entity {
         health = maxHealth;
         speed = pSpeed;
         movementInput = Vector2.Zero;
+        attackArea = new Rectangle();
     }
     
     public void damage(float damage) {
@@ -33,6 +35,15 @@ public class Character extends Entity {
         if(health <= 0) {
             die();
         }
+    }
+    
+    public void attack(Character c) {
+        float damage = equipped.getValue("damage");
+        c.damage(damage);
+    }
+    
+    public Rectangle getAttackArea() {
+        return attackArea;
     }
     
     private void die() {
