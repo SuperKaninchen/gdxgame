@@ -62,7 +62,7 @@ public class GameScreen implements Screen {
 
         // Loading player
         playerTexture = new Texture(Gdx.files.internal("player.png"));
-        player = new Player(playerTexture);
+        player = new Player(this, playerTexture);
 
         // Initialize entities
         entities = new Array<>();
