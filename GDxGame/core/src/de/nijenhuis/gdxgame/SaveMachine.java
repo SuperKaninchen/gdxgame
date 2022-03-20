@@ -24,6 +24,8 @@ public class SaveMachine {
     private static FileHandle saveFile;
     private static JsonValue itemDataCache;
     private static FileHandle itemDataFile;
+    private static JsonValue charDataCache;
+    private static FileHandle charDataFile;
     
     private static Preferences prefs;
     
@@ -33,10 +35,12 @@ public class SaveMachine {
         prefs = Gdx.app.getPreferences("gdxgame");
         prefs.putString("saveFile", "persistent.json");
         prefs.putString("itemDataFile", "data/items.json");
+        prefs.putString("charDataFile", "data/characters.json");
         prefs.flush();
         
         saveCache = loadFromFile(getFile("saveFile"));
         itemDataCache = loadFromFile(getFile("itemDataFile"));
+        charDataCache = loadFromFile(getFile("charDataFile"));
     }
     
     // Fr die init(). Kümmert sich um exceptions n stuff
@@ -71,6 +75,8 @@ public class SaveMachine {
         JsonValue child;
         if (path.startsWith("items/")) {
             child = itemDataCache;
+        } else if(path.startsWith("characters")) {
+            child = charDataCache;
         } else {
             child = saveCache;
         }
@@ -91,6 +97,8 @@ public class SaveMachine {
         JsonValue child;
         if (path.startsWith("items/")) {
             child = itemDataCache;
+        } else if(path.startsWith("characters")) {
+            child = charDataCache;
         } else {
             child = saveCache;
         }

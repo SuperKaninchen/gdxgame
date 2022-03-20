@@ -17,6 +17,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Entity {
 
     private Texture texture;
+    
     private Vector2 velocity;
     private Rectangle rect;
     private Vector2 position;
@@ -25,6 +26,20 @@ public class Entity {
         texture = pTexture;
         velocity = Vector2.Zero;
         rect = pRect;
+        position = Vector2.Zero;
+    }
+    
+    public Entity(Rectangle pRect) {
+        texture = null;
+        velocity = Vector2.Zero;
+        rect = pRect;
+        position = Vector2.Zero;
+    }
+    
+    public Entity(Item pItem, float x, float y) {
+        texture = pItem.getTexture();
+        velocity = Vector2.Zero;
+        rect = new Rectangle(x, y, 100, 100);
         position = Vector2.Zero;
     }
     
@@ -75,6 +90,10 @@ public class Entity {
 
     public Texture getTexture() {
         return texture;
+    }
+    
+    public void setTexture(Texture pTexture) {
+        texture = pTexture;
     }
 
     public void setVelocity(Vector2 pVelocity) {

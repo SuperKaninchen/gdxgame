@@ -1,0 +1,18 @@
+{
+	"characters": [
+		{
+			"id": 0,
+			"name": "devchar",
+			"title": "Allmighty Dev-Character"
+		},
+		{
+			"id": 1,
+			"name": "enemy",
+			"title": "Basic enemy",
+			"type": 1,
+			"maxHealth": 200,
+			"speed": 250,
+			"equipped": 1
+		}
+	]
+}

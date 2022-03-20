@@ -4,10 +4,12 @@
  */
 package de.nijenhuis.gdxgame;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.JsonValue;
 
 /**
  *
@@ -15,20 +17,36 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Character extends Entity {
 
+    private String name;
     private int health;
     private int maxHealth;
     private float speed;
     private Vector2 movementInput;
     private Item equipped;
     private Rectangle attackArea;
+    
+    private JsonValue charData;
 
-    public Character(int pMaxHealth, float pSpeed, Texture pTexture, Rectangle pRect) {
+    public Character(int pMaxHealth, float pSpeed, Item pEquipped, Texture pTexture, Rectangle pRect) {
         super(pTexture, pRect);
         maxHealth = pMaxHealth;
         health = maxHealth;
         speed = pSpeed;
+        equipped = pEquipped;
         movementInput = Vector2.Zero;
         attackArea = new Rectangle();
+    }
+
+    public Character(int pId, Rectangle pRect) {
+        super(pRect);
+        charData = SaveMachine.loadValue("characters/"+pId);
+        name = charData.getString("name");
+        maxHealth = charData.getInt("maxHealth", 100);
+        health = maxHealth;
+        equipped = new Item(charData.getInt("equipped"));
+        movementInput = Vector2.Zero;
+        attackArea = new Rectangle();
+        setTexture(new Texture(Gdx.files.internal("data/characters/"+name+".png")));
     }
 
     @Override

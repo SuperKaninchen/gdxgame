@@ -77,8 +77,8 @@ public class GameScreen implements Screen {
 
         // Initialize entities
         entities = new Array<>();
-        entities.add(new Entity(
-                new Texture(Gdx.files.internal("data/items/devitem.png")),
+        entities.add(new Character(
+                1,
                 new Rectangle(200, 200, 32, 32)
         ));
 

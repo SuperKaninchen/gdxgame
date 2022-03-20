@@ -24,11 +24,10 @@ public class Player extends Character {
     private static GameScreen gc;
 
     public Player(GameScreen pGc, Texture pTexture) {
-        super(100, 250f, pTexture, new Rectangle(400, 240, 32, 32));
+        super(100, 250f, new Item(1), pTexture, new Rectangle(400, 240, 32, 32));
         inventory = new Inventory(27);
         hotbar = new Inventory(5);
         hotbar.setItem(1, new Item(0));
-        super.setEquipped(new Item(1));
         gc = pGc;
     }
     

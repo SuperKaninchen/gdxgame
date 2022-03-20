@@ -14,14 +14,12 @@ import com.badlogic.gdx.utils.JsonValue;
 public class Item {
     
     private Texture texture;
-    private int id;
     private String name;
     private String title;
     private JsonValue itemData;
     
     public Item(int pId) {
         itemData = SaveMachine.loadValue("items/"+pId);
-        id = pId;
         System.out.println(itemData);
         name = itemData.getString("name");
         title = itemData.getString("title");
@@ -42,10 +40,6 @@ public class Item {
 
     public Texture getTexture() {
         return texture;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getName() {
