@@ -24,7 +24,7 @@ public class Player extends Character {
     private static GameScreen gc;
 
     public Player(GameScreen pGc, Texture pTexture) {
-        super(100, 250f, new Item(1), pTexture, new Rectangle(400, 240, 32, 32));
+        super(100, 250f, new Item(1), pTexture, new Rectangle(400-32, 240-32, 64, 64));
         inventory = new Inventory(27);
         hotbar = new Inventory(5);
         hotbar.setItem(1, new Item(0));
@@ -43,10 +43,7 @@ public class Player extends Character {
         Array<Entity> entities = gc.getEntities();
         for(Entity e : entities) {
             if(e.getClass() == Character.class) {
-                System.out.println("e is at " + e.getRectangle());
-                System.out.println("aim is at " + getAttackArea());
                 if(getAttackArea().overlaps(e.getRectangle())) {
-                    System.out.println("e overlaps");
                     attack((Character) e);
                 }
             }

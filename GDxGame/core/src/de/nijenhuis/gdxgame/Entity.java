@@ -50,7 +50,7 @@ public class Entity {
                 rect.width,
                 rect.height
         );
-        batch.draw(texture, rect.x, rect.y);
+        batch.draw(texture, rect.x, rect.y, rect.width, rect.height);
     }
 
     public void move(float delta) {

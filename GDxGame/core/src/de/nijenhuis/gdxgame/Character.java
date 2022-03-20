@@ -11,6 +11,9 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonValue;
+import static de.nijenhuis.gdxgame.Constants.HEIGHT;
+import static de.nijenhuis.gdxgame.Constants.WIDTH;
+
 
 /**
  *
@@ -26,7 +29,9 @@ public class Character extends Entity {
     private Item equipped;
     private Rectangle attackArea;
     
-    private float reach = 250;
+    private boolean dead;
+    
+    private float reach = 50;
     
     private JsonValue charData;
 
@@ -54,6 +59,7 @@ public class Character extends Entity {
 
     @Override
     public void draw(SpriteBatch batch, Vector2 offset) {
+        if(dead) return;
         super.draw(batch, offset);
         if (equipped != null) {
             batch.draw(equipped.getTexture(), getRX() + 24, getRY());
@@ -69,10 +75,12 @@ public class Character extends Entity {
     }
     
     private void die() {
+        dead = true;
         System.out.println("Character died.");
     }
     
     public void aim(int x, int y) {
+        y = HEIGHT - y;
         Vector2 newPos = new Vector2(x-getRX(), y-getRY());
         newPos = newPos.clamp(0, reach);
         newPos = newPos.add(new Vector2(getRX(), getRY()));

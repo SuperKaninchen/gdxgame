@@ -79,7 +79,7 @@ public class GameScreen implements Screen {
         entities = new Array<>();
         entities.add(new Character(
                 1,
-                new Rectangle(200, 200, 32, 32)
+                new Rectangle(200, 200, 64, 64)
         ));
 
         // Connect inputProcessor for user input to player
