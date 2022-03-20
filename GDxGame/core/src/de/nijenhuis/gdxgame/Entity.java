@@ -6,6 +6,7 @@ package de.nijenhuis.gdxgame;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -25,6 +26,16 @@ public class Entity {
         velocity = Vector2.Zero;
         rect = pRect;
         position = Vector2.Zero;
+    }
+    
+    public void draw(SpriteBatch batch, Vector2 offset) {
+        rect = new Rectangle(
+                position.x + offset.x,
+                position.y + offset.y,
+                rect.width,
+                rect.height
+        );
+        batch.draw(texture, rect.x, rect.y);
     }
 
     public void move(float delta) {

@@ -5,6 +5,7 @@
 package de.nijenhuis.gdxgame;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -13,14 +14,14 @@ import com.badlogic.gdx.math.Vector2;
  * @author max
  */
 public class Character extends Entity {
-    
+
     private int health;
     private int maxHealth;
     private float speed;
     private Vector2 movementInput;
     private Item equipped;
     private Rectangle attackArea;
-    
+
     public Character(int pMaxHealth, float pSpeed, Texture pTexture, Rectangle pRect) {
         super(pTexture, pRect);
         maxHealth = pMaxHealth;
@@ -29,27 +30,35 @@ public class Character extends Entity {
         movementInput = Vector2.Zero;
         attackArea = new Rectangle();
     }
-    
+
+    @Override
+    public void draw(SpriteBatch batch, Vector2 offset) {
+        super.draw(batch, offset);
+        if (equipped != null) {
+            batch.draw(equipped.getTexture(), getRX() + 24, getRY());
+        }
+    }
+
     public void damage(float damage) {
         health -= damage;
-        if(health <= 0) {
+        if (health <= 0) {
             die();
         }
     }
-    
+
     public void attack(Character c) {
-        float damage = equipped.getValue("damage");
+        float damage = equipped.getValue("damage").asFloat();
         c.damage(damage);
     }
-    
+
     public Rectangle getAttackArea() {
         return attackArea;
     }
-    
+
     private void die() {
-        
+
     }
-    
+
     public void setHorizontalMovement(int input) {
         movementInput.x = input;
     }
@@ -57,10 +66,10 @@ public class Character extends Entity {
     public void setVerticalMovement(int input) {
         movementInput.y = input;
     }
-    
+
     public void update() {
         float m = 1f;
-        if(movementInput.x != 0 && movementInput.y != 0) {
+        if (movementInput.x != 0 && movementInput.y != 0) {
             m = 0.707106781f;
         }
         Vector2 newVelocity = new Vector2(
@@ -69,13 +78,13 @@ public class Character extends Entity {
         );
         setVelocity(newVelocity);
     }
-    
+
     public Item getEquipped() {
         return equipped;
     }
-    
+
     public void setEquipped(Item pEquipped) {
         equipped = pEquipped;
     }
-    
+
 }

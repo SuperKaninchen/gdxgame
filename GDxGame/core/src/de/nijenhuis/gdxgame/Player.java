@@ -6,8 +6,11 @@ package de.nijenhuis.gdxgame;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+import de.nijenhuis.gdxgame.screens.GameScreen;
 
 /**
  *
@@ -25,8 +28,12 @@ public class Player extends Character {
         inventory = new Inventory(27);
         hotbar = new Inventory(5);
         hotbar.setItem(1, new Item(0));
-        super.setEquipped(new Item(0));
+        super.setEquipped(new Item(1));
         gc = pGc;
+    }
+    
+    public void draw(SpriteBatch batch, Vector2 center) {
+        super.draw(batch, new Vector2(-getX()+center.x, -getY()+center.y));
     }
     
     public Inventory getHotbar() {
@@ -35,10 +42,10 @@ public class Player extends Character {
     
     public void doAttack() {
         Array<Entity> entities = gc.getEntities();
-        for(Entity e : enitities) {
+        for(Entity e : entities) {
             if(e.getClass() == Character.class) {
                 if(getAttackArea().overlaps(e.getRectangle())) {
-                    attack(e);
+                    attack((Character) e);
                 }
             }
         }

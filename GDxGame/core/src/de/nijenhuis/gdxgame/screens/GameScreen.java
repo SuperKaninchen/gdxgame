@@ -27,6 +27,10 @@ import de.nijenhuis.gdxgame.Inventory;
 import de.nijenhuis.gdxgame.Item;
 import de.nijenhuis.gdxgame.PlayerInputProcessor;
 import de.nijenhuis.gdxgame.Player;
+import de.nijenhuis.gdxgame.SaveMachine;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -59,6 +63,13 @@ public class GameScreen implements Screen {
         // Loading Tilemap
         tiledMap = new TmxMapLoader().load("untitled.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+        
+        try {
+            // Init SaveMechine
+            SaveMachine.init();
+        } catch (IOException ex) {
+            System.err.println(ex.toString());
+        }
 
         // Loading player
         playerTexture = new Texture(Gdx.files.internal("player.png"));
@@ -67,7 +78,7 @@ public class GameScreen implements Screen {
         // Initialize entities
         entities = new Array<>();
         entities.add(new Entity(
-                new Texture(Gdx.files.internal("devitem.png")),
+                new Texture(Gdx.files.internal("data/items/devitem.png")),
                 new Rectangle(200, 200, 32, 32)
         ));
 
@@ -132,23 +143,11 @@ public class GameScreen implements Screen {
     }
 
     private void renderEntity(Entity e, Vector2 offset) {
-        e.setRectangle(new Rectangle(
-                e.getX() + offset.x,
-                e.getY() + offset.y,
-                e.getRectangle().width,
-                e.getRectangle().height
-        ));
-        batch.draw(e.getTexture(), e.getRX(), e.getRY());
-        if(e.getClass() == Character.class) {
-            Item equipped = ((Character) (e)).getEquipped();
-            if(equipped != null) {
-                batch.draw(equipped.getTexture(), e.getRX() + 24, e.getRY());
-            }
-        }
+        e.draw(batch, offset);
     }
 
     private void renderPlayer() {
-        batch.draw(player.getTexture(), player.getRX(), player.getRY());
+        player.draw(batch, new Vector2(WIDTH/2, HEIGHT/2));
     }
 
     private void moveEntities(float delta) {

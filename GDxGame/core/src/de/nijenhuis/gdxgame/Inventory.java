@@ -18,7 +18,7 @@ public class Inventory {
     private int size;
     private Item[] slots;
     private static Texture slotTexture;
-    private JsonValue jsonObject;
+    //private JsonValue jsonObject;
     
     public Inventory(int pSize) {
         size = pSize;
@@ -41,10 +41,7 @@ public class Inventory {
     }
     
     public Texture getItemTexture(int slotIndex) {
-        if(jsonObject == null) {
-            jsonObject = new JsonReader().parse(Gdx.files.internal("data/items.json"));
-        }
-        return new Texture( Gdx.files.internal(jsonObject.get(slots[slotIndex].getId()).getString("name") + ".png"));
+        return slots[slotIndex].getTexture();
     }
     
     public Texture getSlotTexture() {
