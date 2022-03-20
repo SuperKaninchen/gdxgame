@@ -43,7 +43,10 @@ public class Player extends Character {
         Array<Entity> entities = gc.getEntities();
         for(Entity e : entities) {
             if(e.getClass() == Character.class) {
+                System.out.println("e is at " + e.getRectangle());
+                System.out.println("aim is at " + getAttackArea());
                 if(getAttackArea().overlaps(e.getRectangle())) {
+                    System.out.println("e overlaps");
                     attack((Character) e);
                 }
             }

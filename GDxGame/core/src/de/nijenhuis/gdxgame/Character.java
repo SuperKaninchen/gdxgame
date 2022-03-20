@@ -7,6 +7,7 @@ package de.nijenhuis.gdxgame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonValue;
@@ -25,6 +26,8 @@ public class Character extends Entity {
     private Item equipped;
     private Rectangle attackArea;
     
+    private float reach = 250;
+    
     private JsonValue charData;
 
     public Character(int pMaxHealth, float pSpeed, Item pEquipped, Texture pTexture, Rectangle pRect) {
@@ -34,7 +37,7 @@ public class Character extends Entity {
         speed = pSpeed;
         equipped = pEquipped;
         movementInput = Vector2.Zero;
-        attackArea = new Rectangle();
+        attackArea = new Rectangle(getRX(), getRX(), 128, 128);
     }
 
     public Character(int pId, Rectangle pRect) {
@@ -45,7 +48,7 @@ public class Character extends Entity {
         health = maxHealth;
         equipped = new Item(charData.getInt("equipped"));
         movementInput = Vector2.Zero;
-        attackArea = new Rectangle();
+        attackArea = new Rectangle(getRX(), getRX(), 128, 128);
         setTexture(new Texture(Gdx.files.internal("data/characters/"+name+".png")));
     }
 
@@ -58,10 +61,22 @@ public class Character extends Entity {
     }
 
     public void damage(float damage) {
+        System.out.println("got damaged");
         health -= damage;
         if (health <= 0) {
             die();
         }
+    }
+    
+    private void die() {
+        System.out.println("Character died.");
+    }
+    
+    public void aim(int x, int y) {
+        Vector2 newPos = new Vector2(x-getRX(), y-getRY());
+        newPos = newPos.clamp(0, reach);
+        newPos = newPos.add(new Vector2(getRX(), getRY()));
+        attackArea = new Rectangle(newPos.x-(attackArea.width/2), newPos.y-(attackArea.height/2), attackArea.width, attackArea.height);
     }
 
     public void attack(Character c) {
@@ -71,10 +86,6 @@ public class Character extends Entity {
 
     public Rectangle getAttackArea() {
         return attackArea;
-    }
-
-    private void die() {
-
     }
 
     public void setHorizontalMovement(int input) {

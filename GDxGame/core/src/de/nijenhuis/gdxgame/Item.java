@@ -20,7 +20,6 @@ public class Item {
     
     public Item(int pId) {
         itemData = SaveMachine.loadValue("items/"+pId);
-        System.out.println(itemData);
         name = itemData.getString("name");
         title = itemData.getString("title");
         texture = new Texture(Gdx.files.internal("data/items/"+name+".png"));

@@ -4,6 +4,7 @@
  */
 package de.nijenhuis.gdxgame;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 
@@ -62,7 +63,9 @@ public class PlayerInputProcessor implements InputProcessor {
     }
 
     public boolean touchDown(int x, int y, int pointer, int button) {
-        return false;
+        if (button != Input.Buttons.LEFT || pointer > 0) return false;
+        player.doAttack();
+        return true;
     }
 
     public boolean touchUp(int x, int y, int pointer, int button) {
@@ -74,7 +77,8 @@ public class PlayerInputProcessor implements InputProcessor {
     }
 
     public boolean mouseMoved(int x, int y) {
-        return false;
+        player.aim(x, y);
+        return true;
     }
 
     public boolean scrolled(float amountX, float amountY) {
