@@ -27,6 +27,8 @@ public class SaveMachine {
     
     private static Preferences prefs;
     
+    // Muss vor dem verwenden aufgerufen werden, um statische Variablen zu
+    // initialisieren.
     public static void init() throws IOException {
         prefs = Gdx.app.getPreferences("gdxgame");
         prefs.putString("saveFile", "persistent.json");
@@ -37,6 +39,7 @@ public class SaveMachine {
         itemDataCache = loadFromFile(getFile("itemDataFile"));
     }
     
+    // Fr die init(). Kümmert sich um exceptions n stuff
     private static FileHandle getFile(String fileName) throws IOException {
         String filePath = prefs.getString(fileName, "persistent.json");
         FileHandle file = Gdx.files.internal(filePath);
@@ -52,14 +55,18 @@ public class SaveMachine {
         return file;
     }
     
+    // Lädt den Inhalt der Datei in den statischen Cache
     public static JsonValue loadFromFile(FileHandle file) {
         return (new JsonReader()).parse(file.readString());
     }
     
+    // Speichert den Inhalt des statischen Caches innerhalb der Datei
     public static void saveToFile(JsonValue data, FileHandle file) {
         file.writeString(data.asString(), false);
     }
     
+    // Speichert einen Wert in Form von JsonValue bei path.
+    // path -> siehe loadValue()
     public static void saveValue(JsonValue value, String path) {
         JsonValue child;
         if (path.startsWith("items/")) {
@@ -76,6 +83,10 @@ public class SaveMachine {
         child = value;
     }
     
+    // Lädt einen Wert in Form von JsonValue bei path.
+    // path bescheibt einen pseudo-Dateipfad durch die Json-Objekte.
+    // z.B. würde player/inventory/3 das dritte Element des Inventars des
+    // Spielers laden.
     public static JsonValue loadValue(String path) {
         JsonValue child;
         if (path.startsWith("items/")) {
