@@ -3,14 +3,17 @@
 		{
 			"id": 0,
 			"name": "devitem",
-			"title": "Allmighty Dev-Item"
+			"title": "Allmighty Dev-Item",
+			"type": 0
 		},
 		{
 			"id": 1,
 			"name": "sword",
 			"title": "Basic sword",
 			"type": 1,
-			"damage": 12.5
+			"damage": 12.5,
+			"cooldown": 1.5,
+			"reach": 521
 		}
 	]
 }

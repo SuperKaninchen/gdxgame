@@ -115,8 +115,9 @@ public class GameScreen implements Screen {
         moveCamera();
 
         // Move player and entities
-        player.update();
+        player.update(delta);
         player.move(delta);
+        updateEntities(delta);
         moveEntities(delta);
     }
 
@@ -133,12 +134,16 @@ public class GameScreen implements Screen {
 
     private void renderEntities() {
         Vector2 offset = new Vector2(
-                400 - player.getX(),
-                240 - player.getY()
+                (WIDTH/2) - player.getX(),
+                (HEIGHT/2) - player.getY()
         );
 
         for (Entity e : entities) {
             renderEntity(e, offset);
+            if(e.getClass() == Character.class) {
+                Character c = (Character) e;
+                c.doAttack(player);
+            }
         }
     }
 
@@ -153,6 +158,15 @@ public class GameScreen implements Screen {
     private void moveEntities(float delta) {
         for (Entity e : entities) {
             e.move(delta);
+        }
+    }
+    
+    private void updateEntities(float delta) {
+        for (Entity e : entities) {
+            if(e.getClass() == Character.class) {
+                Character c = (Character) e;
+                c.update(delta);
+            }
         }
     }
 

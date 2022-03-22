@@ -26,27 +26,27 @@ public class Entity {
         texture = pTexture;
         velocity = Vector2.Zero;
         rect = pRect;
-        position = Vector2.Zero;
+        position = new Vector2(pRect.x, pRect.y);
     }
     
     public Entity(Rectangle pRect) {
         texture = null;
         velocity = Vector2.Zero;
         rect = pRect;
-        position = Vector2.Zero;
+        position = new Vector2(pRect.x, pRect.y);
     }
     
     public Entity(Item pItem, float x, float y) {
         texture = pItem.getTexture();
         velocity = Vector2.Zero;
         rect = new Rectangle(x, y, 100, 100);
-        position = Vector2.Zero;
+        position = new Vector2(x, y);
     }
     
     public void draw(SpriteBatch batch, Vector2 offset) {
         rect = new Rectangle(
-                position.x + offset.x,
-                position.y + offset.y,
+                position.x + offset.x - (rect.width/2),
+                position.y + offset.y - (rect.height/2),
                 rect.width,
                 rect.height
         );
@@ -58,6 +58,7 @@ public class Entity {
             position.x + velocity.x * delta,
             position.y + velocity.y * delta
         );
+        System.out.println(position);
     }
 
     public float getRX() {
@@ -74,6 +75,7 @@ public class Entity {
     
     public void setRectangle(Rectangle pRect) {
         rect = pRect;
+        position = new Vector2(pRect.x, pRect.y);
     }
 
     public float getX() {

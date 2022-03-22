@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import static de.nijenhuis.gdxgame.Constants.WIDTH;
+import static de.nijenhuis.gdxgame.Constants.HEIGHT;
 import de.nijenhuis.gdxgame.screens.GameScreen;
 
 /**
@@ -20,14 +22,16 @@ public class Player extends Character {
 
     private Inventory inventory;
     private Inventory hotbar;
+    private Vector2 aimPos;
     
     private static GameScreen gc;
 
     public Player(GameScreen pGc, Texture pTexture) {
-        super(100, 250f, new Item(1), pTexture, new Rectangle(400-32, 240-32, 64, 64));
+        super(100, 250f, new Item(1), pTexture, new Rectangle((WIDTH/2)-32, (HEIGHT/2)-32, 64, 64));
         inventory = new Inventory(27);
         hotbar = new Inventory(5);
         hotbar.setItem(1, new Item(0));
+        aimPos = Vector2.Zero;
         gc = pGc;
     }
     
@@ -43,11 +47,17 @@ public class Player extends Character {
         Array<Entity> entities = gc.getEntities();
         for(Entity e : entities) {
             if(e.getClass() == Character.class) {
-                if(getAttackArea().overlaps(e.getRectangle())) {
+                System.out.println(getPosition().dst2(e.getPosition()));
+                if(getPosition().dst2(e.getPosition()) <= getReach()) {
                     attack((Character) e);
                 }
             }
         }
+    }
+    
+    public void aim(int x, int y) {
+        y = HEIGHT - y;
+        aimPos = new Vector2(x, y);
     }
 
 }

@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import static de.nijenhuis.gdxgame.Constants.HEIGHT;
 import static de.nijenhuis.gdxgame.Constants.WIDTH;
@@ -20,40 +21,52 @@ import static de.nijenhuis.gdxgame.Constants.WIDTH;
  * @author max
  */
 public class Character extends Entity {
-
-    private String name;
-    private int health;
-    private int maxHealth;
+    
+    // Movement
     private float speed;
     private Vector2 movementInput;
-    private Item equipped;
-    private Rectangle attackArea;
-    
+    // Character
+    private String name;
+    private int maxHealth;
+    private int health;
     private boolean dead;
     
-    private float reach = 50;
+    // Equipped
+    private Item equipped;
+    private float reach;
+    private float cooldown;
+    private float timer;
     
     private JsonValue charData;
 
     public Character(int pMaxHealth, float pSpeed, Item pEquipped, Texture pTexture, Rectangle pRect) {
         super(pTexture, pRect);
+        
+        speed = pSpeed;
+        movementInput = Vector2.Zero;
+        
+        name = "character";
         maxHealth = pMaxHealth;
         health = maxHealth;
-        speed = pSpeed;
-        equipped = pEquipped;
-        movementInput = Vector2.Zero;
-        attackArea = new Rectangle(getRX(), getRX(), 128, 128);
+        dead = false;
+        
+        setEquipped(pEquipped);
     }
 
     public Character(int pId, Rectangle pRect) {
         super(pRect);
         charData = SaveMachine.loadValue("characters/"+pId);
+        
+        speed = charData.getFloat("speed");
+        movementInput = Vector2.Zero;
+        
+        
         name = charData.getString("name");
         maxHealth = charData.getInt("maxHealth", 100);
         health = maxHealth;
-        equipped = new Item(charData.getInt("equipped"));
-        movementInput = Vector2.Zero;
-        attackArea = new Rectangle(getRX(), getRX(), 128, 128);
+        
+        setEquipped(new Item(charData.getInt("equipped")));
+        
         setTexture(new Texture(Gdx.files.internal("data/characters/"+name+".png")));
     }
 
@@ -78,22 +91,11 @@ public class Character extends Entity {
         dead = true;
         System.out.println("Character died.");
     }
-    
-    public void aim(int x, int y) {
-        y = HEIGHT - y;
-        Vector2 newPos = new Vector2(x-getRX(), y-getRY());
-        newPos = newPos.clamp(0, reach);
-        newPos = newPos.add(new Vector2(getRX(), getRY()));
-        attackArea = new Rectangle(newPos.x-(attackArea.width/2), newPos.y-(attackArea.height/2), attackArea.width, attackArea.height);
-    }
 
     public void attack(Character c) {
         float damage = equipped.getValue("damage").asFloat();
         c.damage(damage);
-    }
-
-    public Rectangle getAttackArea() {
-        return attackArea;
+        System.out.println("attacked");
     }
 
     public void setHorizontalMovement(int input) {
@@ -104,7 +106,7 @@ public class Character extends Entity {
         movementInput.y = input;
     }
 
-    public void update() {
+    public void update(float delta) {
         float m = 1f;
         if (movementInput.x != 0 && movementInput.y != 0) {
             m = 0.707106781f;
@@ -114,6 +116,16 @@ public class Character extends Entity {
                 movementInput.y * speed * m
         );
         setVelocity(newVelocity);
+        
+        timer -= delta;
+    }
+    
+    public void doAttack(Player p) {
+        if(timer > 0) return;
+        if(getPosition().dst2(p.getPosition()) <= reach) {
+            attack(p);
+            timer = cooldown;
+        }
     }
 
     public Item getEquipped() {
@@ -122,6 +134,12 @@ public class Character extends Entity {
 
     public void setEquipped(Item pEquipped) {
         equipped = pEquipped;
+        cooldown = equipped.getValue("cooldown").asFloat();
+        reach = equipped.getInt("reach");
+    }
+    
+    public float getReach() {
+        return reach;
     }
 
 }
