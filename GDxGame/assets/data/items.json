@@ -13,7 +13,16 @@
 			"type": 1,
 			"damage": 12.5,
 			"cooldown": 1.5,
-			"reach": 521
+			"reach": 512
+		},
+		{
+			"id": 2,
+			"name": "stick",
+			"title": "Some stick",
+			"type": 1,
+			"damage": 5,
+			"cooldown": 1,
+			"reach": 512
 		}
 	]
 }
