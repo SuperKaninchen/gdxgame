@@ -1,4 +1,10 @@
 {
+	"types": [
+		0: "devitem",
+		1: "weapon",
+		2: "consumable"
+	]
+	
 	"items": [
 		{
 			"id": 0,
@@ -23,6 +29,15 @@
 			"damage": 5,
 			"cooldown": 1,
 			"reach": 512
+		},
+		{
+			"id": 3,
+			"name": "bow",
+			"title": "Standard wooden bow",
+			"type": 1,
+			"damage": 20,
+			"cooldown": 1.5,
+			"reach": 2048
 		}
 	]
 }
