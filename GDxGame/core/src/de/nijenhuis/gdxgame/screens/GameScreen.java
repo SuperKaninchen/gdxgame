@@ -16,8 +16,10 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import de.nijenhuis.gdxgame.Character;
 import static de.nijenhuis.gdxgame.Constants.HEIGHT;
 import static de.nijenhuis.gdxgame.Constants.WIDTH;
@@ -43,6 +45,8 @@ public class GameScreen implements Screen {
     private OrthographicCamera camera;
     private SpriteBatch batch;
     private Vector2 cameraPosition;
+    
+    private Stage stage;
 
     private Array<Entity> entities;
     private Player player;
@@ -55,10 +59,12 @@ public class GameScreen implements Screen {
         this.game = game;
 
         // Setting up camera and rendering
-        camera = new OrthographicCamera();
+        camera = new OrthographicCamera(30, 30 * (HEIGHT / WIDTH));
         camera.setToOrtho(false, WIDTH, HEIGHT);
         batch = new SpriteBatch();
         cameraPosition = Vector2.Zero;
+        
+        stage = new Stage(new ScreenViewport());
 
         // Loading Tilemap
         tiledMap = new TmxMapLoader().load("untitled.tmx");
@@ -85,6 +91,8 @@ public class GameScreen implements Screen {
         // Connect inputProcessor for user input to player
         PlayerInputProcessor inputProcessor = new PlayerInputProcessor(player);
         Gdx.input.setInputProcessor(inputProcessor);
+        
+        Gdx.input.setInputProcessor(stage);
 
     }
     
@@ -99,15 +107,20 @@ public class GameScreen implements Screen {
         ScreenUtils.clear(0, 0, 0.2f, 1);
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
+        
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        
+        stage.act(delta);
+        stage.draw();
 
         // Rendering Map
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
 
-        // Rendering player, entities, and HUD
+        // Rendering entities, player, and HUD
         batch.begin();
-        renderPlayer();
         renderEntities();
+        renderPlayer();
         renderHUD();
         batch.end();
 
@@ -175,6 +188,7 @@ public class GameScreen implements Screen {
     }
 
     private void renderHotbar() {
+        /* OLD
         Inventory hotbar = player.getHotbar();
         Texture slotTexture = hotbar.getSlotTexture();
         for (int i = 0; i < hotbar.getSize(); i++) {
@@ -182,7 +196,8 @@ public class GameScreen implements Screen {
             if (hotbar.getItem(i) != null) {
                 batch.draw(hotbar.getItemTexture(i), i * slotTexture.getWidth() + 32, 32, 64, 64);
             }
-        }
+        }*/
+        player.getHotbar().draw(batch, new Vector2(16, 16));
     }
 
     @Override
@@ -192,6 +207,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
     }
 
     @Override

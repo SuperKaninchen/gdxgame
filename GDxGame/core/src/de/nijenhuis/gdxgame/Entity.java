@@ -58,7 +58,6 @@ public class Entity {
             position.x + velocity.x * delta,
             position.y + velocity.y * delta
         );
-        System.out.println(position);
     }
 
     public float getRX() {

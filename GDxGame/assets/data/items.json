@@ -3,41 +3,58 @@
 		0: "devitem",
 		1: "weapon",
 		2: "consumable"
-	]
-	
+	],
+	"effects": [
+		0: "heal",
+		1: "damage",
+		2: "energy"
+	],
+
 	"items": [
 		{
 			"id": 0,
+			"name": "null",
+		},
+		{
+			"id": 1,
 			"name": "devitem",
 			"title": "Allmighty Dev-Item",
 			"type": 0
 		},
 		{
-			"id": 1,
+			"id": 2,
 			"name": "sword",
 			"title": "Basic sword",
 			"type": 1,
 			"damage": 12.5,
 			"cooldown": 1.5,
-			"reach": 512
+			"reach": 128
 		},
 		{
-			"id": 2,
+			"id": 3,
 			"name": "stick",
 			"title": "Some stick",
 			"type": 1,
 			"damage": 5,
 			"cooldown": 1,
-			"reach": 512
+			"reach": 128
 		},
 		{
-			"id": 3,
+			"id": 4,
 			"name": "bow",
 			"title": "Standard wooden bow",
 			"type": 1,
 			"damage": 20,
 			"cooldown": 1.5,
 			"reach": 2048
+		},
+		{
+			"id": 5,
+			"name": "healthPotion",
+			"title": "Small health potion",
+			"type": 2,
+			"effect": 0,
+			"amount": 25
 		}
 	]
 }

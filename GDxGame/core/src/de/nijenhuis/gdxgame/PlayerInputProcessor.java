@@ -35,6 +35,9 @@ public class PlayerInputProcessor implements InputProcessor {
             case Keys.S:
                 player.setVerticalMovement(-1);
                 break;
+            case Keys.E:
+                player.toggleInventory();
+                break;
         }
         return true;
     }

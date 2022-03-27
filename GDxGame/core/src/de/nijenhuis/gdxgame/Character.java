@@ -43,7 +43,7 @@ public class Character extends Entity {
         super(pTexture, pRect);
         
         speed = pSpeed;
-        movementInput = Vector2.Zero;
+        movementInput = new Vector2(0, 0);
         
         name = "character";
         maxHealth = pMaxHealth;
@@ -58,7 +58,7 @@ public class Character extends Entity {
         charData = SaveMachine.loadValue("characters/"+pId);
         
         speed = charData.getFloat("speed");
-        movementInput = Vector2.Zero;
+        movementInput = new Vector2(0, 0);
         
         
         name = charData.getString("name");
@@ -97,6 +97,14 @@ public class Character extends Entity {
         c.damage(damage);
         System.out.println("attacked");
     }
+    
+    public void applyEffect(int effectId, int effectAmount) {
+        switch(effectId) {
+            case 0:
+                health += effectAmount;
+                break;
+        }
+    }
 
     public void setHorizontalMovement(int input) {
         movementInput.x = input;
@@ -122,7 +130,7 @@ public class Character extends Entity {
     
     public void doAttack(Player p) {
         if(timer > 0) return;
-        if(getPosition().dst2(p.getPosition()) <= reach) {
+        if(getPosition().dst(p.getPosition()) <= reach) {
             attack(p);
             timer = cooldown;
         }
@@ -140,6 +148,10 @@ public class Character extends Entity {
     
     public float getReach() {
         return reach;
+    }
+    
+    public boolean isDead() {
+        return dead;
     }
 
 }
