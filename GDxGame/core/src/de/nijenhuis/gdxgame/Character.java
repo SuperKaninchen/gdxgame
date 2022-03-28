@@ -6,6 +6,7 @@ package de.nijenhuis.gdxgame;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
@@ -39,7 +40,7 @@ public class Character extends Entity {
     
     private JsonValue charData;
 
-    public Character(int pMaxHealth, float pSpeed, Item pEquipped, Texture pTexture, Rectangle pRect) {
+    /*public Character(int pMaxHealth, float pSpeed, Item pEquipped, Texture pTexture, Rectangle pRect) {
         super(pTexture, pRect);
         
         speed = pSpeed;
@@ -68,14 +69,31 @@ public class Character extends Entity {
         setEquipped(new Item(charData.getInt("equipped")));
         
         setTexture(new Texture(Gdx.files.internal("data/characters/"+name+".png")));
-    }
+    }*/
 
+    public Character(int pId, Vector2 pos) {
+        super();
+        charData = SaveMachine.loadValue("characters/"+pId);
+        
+        speed = charData.getFloat("speed");
+        movementInput = new Vector2(0, 0);
+        
+        
+        name = charData.getString("name");
+        maxHealth = charData.getInt("maxHealth", 100);
+        health = maxHealth;
+        
+        setEquipped(new Item(charData.getInt("equipped")));
+        
+        setSprite(TextureMachine.getSprite("characters/"+name), pos);
+    }
+    
     @Override
-    public void draw(SpriteBatch batch, Vector2 offset) {
+    public void draw(Batch batch, float parentAlpha) {
         if(dead) return;
-        super.draw(batch, offset);
+        super.draw(batch, parentAlpha);
         if (equipped != null) {
-            batch.draw(equipped.getTexture(), getRX() + 24, getRY());
+            batch.draw(equipped.getTexture(), getX() + 24, getY());
         }
     }
 

@@ -1,4 +1,9 @@
 {
+	"types": [
+		0: "devchar",
+		1: "player",
+		2: "enemy"
+	],
 	"characters": [
 		{
 			"id": 0,
@@ -7,10 +12,19 @@
 		},
 		{
 			"id": 1,
-			"name": "enemy",
-			"title": "Basic enemy",
+			"name": "player",
+			"title": "Standard player character",
 			"type": 1,
 			"maxHealth": 200,
+			"speed": 350,
+			"equipped": 2
+		},
+		{
+			"id": 2,
+			"name": "enemy",
+			"title": "Basic enemy",
+			"type": 2,
+			"maxHealth": 100,
 			"speed": 250,
 			"equipped": 2
 		}

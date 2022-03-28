@@ -6,6 +6,7 @@ package de.nijenhuis.gdxgame;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -27,8 +28,8 @@ public class Player extends Character {
     
     private static GameScreen gc;
 
-    public Player(GameScreen pGc, Texture pTexture) {
-        super(100, 250f, new Item(2), pTexture, new Rectangle((WIDTH/2)-32, (HEIGHT/2)-32, 64, 64));
+    public Player(GameScreen pGc) {
+        super(1, new Vector2(0, 0));
         inventory = new Inventory(15);
         inventory.setItem(0, new Item(5));
         hotbar = new Inventory(5);
@@ -38,12 +39,21 @@ public class Player extends Character {
         gc = pGc;
     }
     
-    public void draw(SpriteBatch batch, Vector2 center) {
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        if(isDead()) return;
+        super.draw(batch, parentAlpha);
+        if (getEquipped() != null) {
+            batch.draw(getEquipped().getTexture(), getX() + 24, getY());
+        }
+    }
+    
+    /*public void draw(SpriteBatch batch, Vector2 center) {
         super.draw(batch, new Vector2(-getX()+center.x, -getY()+center.y));
         if(inventoryVisible) {
             inventory.draw(batch, new Vector2(16, 48+128));
         }
-    }
+    }*/
     
     public Inventory getHotbar() {
         return hotbar;

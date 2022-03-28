@@ -30,6 +30,7 @@ import de.nijenhuis.gdxgame.Item;
 import de.nijenhuis.gdxgame.PlayerInputProcessor;
 import de.nijenhuis.gdxgame.Player;
 import de.nijenhuis.gdxgame.SaveMachine;
+import de.nijenhuis.gdxgame.TextureMachine;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -76,16 +77,16 @@ public class GameScreen implements Screen {
         } catch (IOException ex) {
             System.err.println(ex.toString());
         }
+        TextureMachine.init();
 
         // Loading player
-        playerTexture = new Texture(Gdx.files.internal("player.png"));
-        player = new Player(this, playerTexture);
+        stage.addActor(new Player(this));
 
         // Initialize entities
         entities = new Array<>();
-        entities.add(new Character(
+        stage.addActor(new Character(
                 1,
-                new Rectangle(200, 200, 64, 64)
+                new Vector2(200, 300)
         ));
 
         // Connect inputProcessor for user input to player
@@ -118,20 +119,20 @@ public class GameScreen implements Screen {
         tiledMapRenderer.render();
 
         // Rendering entities, player, and HUD
-        batch.begin();
+        /*batch.begin();
         renderEntities();
         renderPlayer();
         renderHUD();
-        batch.end();
+        batch.end();*/
 
         // Move camera to player
-        moveCamera();
+        //moveCamera();
 
         // Move player and entities
-        player.update(delta);
+        /*player.update(delta);
         player.move(delta);
         updateEntities(delta);
-        moveEntities(delta);
+        moveEntities(delta);*/
     }
 
     private void moveCamera() {
@@ -145,7 +146,7 @@ public class GameScreen implements Screen {
         );
     }
 
-    private void renderEntities() {
+    /*private void renderEntities() {
         Vector2 offset = new Vector2(
                 (WIDTH/2) - player.getX(),
                 (HEIGHT/2) - player.getY()
@@ -181,7 +182,7 @@ public class GameScreen implements Screen {
                 c.update(delta);
             }
         }
-    }
+    }*/
 
     private void renderHUD() {
         renderHotbar();
