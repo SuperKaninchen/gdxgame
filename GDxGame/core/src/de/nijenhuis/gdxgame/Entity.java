@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  *
  * @author max
  */
-public class Entity extends Actor {
+public class Entity {
     
     TextureRegion region;
 
@@ -43,7 +43,7 @@ public class Entity extends Actor {
     public Entity(Item pItem, float x, float y) {
         texture = pItem.getTexture();
         velocity = Vector2.Zero;
-        rect = new Rectangle(x, y, 100, 100);
+        rect = new Rectangle(x, y, texture.getWidth(), texture.getHeight());
         position = new Vector2(x, y);
     }
     

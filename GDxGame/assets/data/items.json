@@ -32,6 +32,15 @@
 		},
 		{
 			"id": 3,
+			"name": "sword",
+			"title": "Better sword",
+			"type": 1,
+			"damage": 20,
+			"cooldown": 0.75,
+			"reach": 128
+		},
+		{
+			"id": 4,
 			"name": "stick",
 			"title": "Some stick",
 			"type": 1,
@@ -40,7 +49,7 @@
 			"reach": 128
 		},
 		{
-			"id": 4,
+			"id": 5,
 			"name": "bow",
 			"title": "Standard wooden bow",
 			"type": 1,
@@ -49,7 +58,7 @@
 			"reach": 2048
 		},
 		{
-			"id": 5,
+			"id": 6,
 			"name": "healthPotion",
 			"title": "Small health potion",
 			"type": 2,

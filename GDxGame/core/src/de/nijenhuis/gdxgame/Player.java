@@ -25,16 +25,21 @@ public class Player extends Character {
     private Vector2 aimPos;
     private boolean inventoryVisible;
     
+    private static Vector2 center;
+    
     private static GameScreen gc;
+    
+    private static float maxAttackAngle = 25;
 
     public Player(GameScreen pGc, Texture pTexture) {
         super(100, 250f, new Item(2), pTexture, new Rectangle((WIDTH/2)-32, (HEIGHT/2)-32, 64, 64));
         inventory = new Inventory(15);
-        inventory.setItem(0, new Item(5));
+        inventory.setItem(0, new Item(6));
         hotbar = new Inventory(5);
         hotbar.setItem(1, new Item(1));
         aimPos = Vector2.Zero;
         inventoryVisible = false;
+        center = new Vector2(WIDTH/2, HEIGHT/2);
         gc = pGc;
     }
     
@@ -53,8 +58,14 @@ public class Player extends Character {
         Array<Entity> entities = gc.getEntities();
         for(Entity e : entities) {
             if(e.getClass() == Character.class) {
-                System.out.println(getPosition().dst(e.getPosition()));
-                if(getPosition().dst(e.getPosition()) <= getReach()) {
+                float distance = getPosition().dst(e.getPosition());
+                float angle = Math.abs(
+                        aimPos.sub(center).angleDeg() -
+                        (new Vector2(e.getRX(), e.getRY())).sub(center).angleDeg()
+                );
+                System.out.println(angle);
+                if(distance <= getReach() && angle <= maxAttackAngle) {
+                    System.out.println("player attacked");
                     attack((Character) e);
                 }
             }

@@ -37,6 +37,11 @@ public class Character extends Entity {
     private float cooldown;
     private float timer;
     
+    public static final float swingSpeed = 250;
+    private float curSwingAngle = 0;
+    private float swingAngle = 90;
+    private boolean weaponFlipped = false;
+    
     private JsonValue charData;
 
     public Character(int pMaxHealth, float pSpeed, Item pEquipped, Texture pTexture, Rectangle pRect) {
@@ -75,8 +80,41 @@ public class Character extends Entity {
         if(dead) return;
         super.draw(batch, offset);
         if (equipped != null) {
-            batch.draw(equipped.getTexture(), getRX() + 24, getRY());
+            drawEquipped(batch);
         }
+    }
+    
+    private void drawEquipped(SpriteBatch batch) {
+        if(movementInput.x < 0) weaponFlipped = true;
+        if(movementInput.x > 0) weaponFlipped = false;
+        float x = getRX();
+        if(!weaponFlipped) {
+            x += 39;
+        } else {
+            x -= 7;
+        }
+        float y = getRY() + 9;
+        float oX = weaponFlipped ? 22 : 10;
+        float oY = 10;
+        float rotation = weaponFlipped ? -curSwingAngle : curSwingAngle;
+        batch.draw(
+                equipped.getTexture(),
+                x,
+                y,
+                oX,
+                oY,
+                equipped.getTexture().getWidth(),
+                equipped.getTexture().getHeight(),
+                1,
+                1,
+                rotation,
+                0,
+                0,
+                equipped.getTexture().getWidth(),
+                equipped.getTexture().getHeight(),
+                weaponFlipped,
+                false
+        );
     }
 
     public void damage(float damage) {
@@ -93,9 +131,11 @@ public class Character extends Entity {
     }
 
     public void attack(Character c) {
+        if(timer > 0) return;
         float damage = equipped.getValue("damage").asFloat();
         c.damage(damage);
-        System.out.println("attacked");
+        curSwingAngle = swingAngle;
+        timer = cooldown;
     }
     
     public void applyEffect(int effectId, int effectAmount) {
@@ -126,13 +166,15 @@ public class Character extends Entity {
         setVelocity(newVelocity);
         
         timer -= delta;
+        if(curSwingAngle > -swingAngle) {
+            curSwingAngle = curSwingAngle-(delta*swingSpeed);
+        }
     }
     
     public void doAttack(Player p) {
         if(timer > 0) return;
         if(getPosition().dst(p.getPosition()) <= reach) {
             attack(p);
-            timer = cooldown;
         }
     }
 

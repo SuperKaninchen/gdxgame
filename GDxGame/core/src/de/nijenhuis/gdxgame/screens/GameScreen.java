@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import de.nijenhuis.gdxgame.Character;
+import de.nijenhuis.gdxgame.Constants;
 import static de.nijenhuis.gdxgame.Constants.HEIGHT;
 import static de.nijenhuis.gdxgame.Constants.WIDTH;
 import de.nijenhuis.gdxgame.Entity;
@@ -92,7 +93,7 @@ public class GameScreen implements Screen {
         PlayerInputProcessor inputProcessor = new PlayerInputProcessor(player);
         Gdx.input.setInputProcessor(inputProcessor);
         
-        Gdx.input.setInputProcessor(stage);
+        //Gdx.input.setInputProcessor(stage);
 
     }
     
@@ -208,7 +209,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
+        Constants.WIDTH = width;
+        Constants.HEIGHT = height;
     }
 
     @Override
