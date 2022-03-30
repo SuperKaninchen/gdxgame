@@ -1,0 +1,10 @@
+{
+	"quests": [
+		{
+			"id": 0,
+			"name": "devquest",
+			"description": "devquest",
+			"type": 0
+		}
+	]
+}

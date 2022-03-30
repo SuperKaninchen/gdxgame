@@ -118,7 +118,7 @@ public class Character extends Entity {
     }
 
     public void damage(float damage) {
-        System.out.println("got damaged");
+        if(dead) return;
         health -= damage;
         if (health <= 0) {
             die();
@@ -131,7 +131,7 @@ public class Character extends Entity {
     }
 
     public void attack(Character c) {
-        if(timer > 0) return;
+        if(timer > 0 || dead) return;
         float damage = equipped.getValue("damage").asFloat();
         c.damage(damage);
         curSwingAngle = swingAngle;
@@ -153,8 +153,13 @@ public class Character extends Entity {
     public void setVerticalMovement(int input) {
         movementInput.y = input;
     }
+    
+    public void setMovement(Vector2 input) {
+        movementInput = input;
+    }
 
     public void update(float delta) {
+        if(dead) return;
         float m = 1f;
         if (movementInput.x != 0 && movementInput.y != 0) {
             m = 0.707106781f;
@@ -171,11 +176,8 @@ public class Character extends Entity {
         }
     }
     
-    public void doAttack(Player p) {
-        if(timer > 0) return;
-        if(getPosition().dst(p.getPosition()) <= reach) {
-            attack(p);
-        }
+    public boolean canAttack() {
+        return !(timer > 0);
     }
 
     public Item getEquipped() {

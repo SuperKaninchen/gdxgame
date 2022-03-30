@@ -21,11 +21,9 @@ import java.util.logging.Logger;
 public class SaveMachine {
     
     private static JsonValue saveCache;
-    private static FileHandle saveFile;
     private static JsonValue itemDataCache;
-    private static FileHandle itemDataFile;
     private static JsonValue charDataCache;
-    private static FileHandle charDataFile;
+    private static JsonValue questDataCache;
     
     private static Preferences prefs;
     
@@ -36,11 +34,13 @@ public class SaveMachine {
         prefs.putString("saveFile", "persistent.json");
         prefs.putString("itemDataFile", "data/items.json");
         prefs.putString("charDataFile", "data/characters.json");
+        prefs.putString("questDataFile", "data/quests.json");
         prefs.flush();
         
         saveCache = loadFromFile(getFile("saveFile"));
         itemDataCache = loadFromFile(getFile("itemDataFile"));
         charDataCache = loadFromFile(getFile("charDataFile"));
+        questDataCache = loadFromFile(getFile("questDataFile"));
     }
     
     // Fr die init(). Kümmert sich um exceptions n stuff
@@ -69,17 +69,24 @@ public class SaveMachine {
         file.writeString(data.asString(), false);
     }
     
+    private static JsonValue getCache(String path) {
+        JsonValue cache;
+        if (path.startsWith("items/")) {
+            cache = itemDataCache;
+        } else if(path.startsWith("characters/")) {
+            cache = charDataCache;
+        } else if (path.startsWith("quests/")) {
+            cache = questDataCache;
+        } else {
+            cache = saveCache;
+        }
+        return cache;
+    }
+    
     // Speichert einen Wert in Form von JsonValue bei path.
     // path -> siehe loadValue()
     public static void saveValue(JsonValue value, String path) {
-        JsonValue child;
-        if (path.startsWith("items/")) {
-            child = itemDataCache;
-        } else if(path.startsWith("characters")) {
-            child = charDataCache;
-        } else {
-            child = saveCache;
-        }
+        JsonValue child = getCache(path);
         for (String s : path.split("/")) {
             if (!child.has(s)) {
                 child.addChild(s, new JsonValue("."));
@@ -94,14 +101,7 @@ public class SaveMachine {
     // z.B. würde player/inventory/3 das dritte Element des Inventars des
     // Spielers laden.
     public static JsonValue loadValue(String path) {
-        JsonValue child;
-        if (path.startsWith("items/")) {
-            child = itemDataCache;
-        } else if(path.startsWith("characters")) {
-            child = charDataCache;
-        } else {
-            child = saveCache;
-        }
+        JsonValue child = getCache(path);
         for (String s : path.split("/")) {
             try {
                 child = child.get(Integer.parseInt(s));

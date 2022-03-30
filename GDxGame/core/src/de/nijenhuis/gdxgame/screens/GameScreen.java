@@ -24,6 +24,7 @@ import de.nijenhuis.gdxgame.Character;
 import de.nijenhuis.gdxgame.Constants;
 import static de.nijenhuis.gdxgame.Constants.HEIGHT;
 import static de.nijenhuis.gdxgame.Constants.WIDTH;
+import de.nijenhuis.gdxgame.Enemy;
 import de.nijenhuis.gdxgame.Entity;
 import de.nijenhuis.gdxgame.GDxGame;
 import de.nijenhuis.gdxgame.Inventory;
@@ -80,12 +81,12 @@ public class GameScreen implements Screen {
 
         // Loading player
         playerTexture = new Texture(Gdx.files.internal("player.png"));
-        player = new Player(this, playerTexture);
+        player = new Player(this);
 
         // Initialize entities
         entities = new Array<>();
-        entities.add(new Character(
-                1,
+        entities.add(new Enemy(
+                2,
                 new Rectangle(200, 200, 64, 64)
         ));
 
@@ -154,9 +155,9 @@ public class GameScreen implements Screen {
 
         for (Entity e : entities) {
             renderEntity(e, offset);
-            if(e.getClass() == Character.class) {
-                Character c = (Character) e;
-                c.doAttack(player);
+            if(e.getClass() == Enemy.class) {
+                Enemy x = (Enemy) e;
+                x.doAttack(player);
             }
         }
     }
@@ -177,7 +178,12 @@ public class GameScreen implements Screen {
     
     private void updateEntities(float delta) {
         for (Entity e : entities) {
-            if(e.getClass() == Character.class) {
+            if(e.getClass() == Enemy.class) {
+                Enemy x = (Enemy) e;
+                if(!x.isDead()) {
+                    x.update(delta, player);
+                }
+            } else if(e.getClass() == Character.class) {
                 Character c = (Character) e;
                 c.update(delta);
             }
@@ -201,6 +207,10 @@ public class GameScreen implements Screen {
         player.getHotbar().draw(batch, new Vector2(16, 16));
     }
 
+    public void renderParticles() {
+        
+    }
+    
     @Override
     public void dispose() {
         batch.dispose();

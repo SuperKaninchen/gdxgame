@@ -29,6 +29,17 @@ public class Inventory {
             slotTexture = new Texture(Gdx.files.internal("slot.png"));
         }
     }
+    
+    public Inventory(int[] pSlots) {
+        size = pSlots.length;
+        slots = new Item[size];
+        for(int i = 0; i < size; i++) {
+            slots[i] = new Item(pSlots[i]);
+        }
+        if (slotTexture == null) {
+            slotTexture = new Texture(Gdx.files.internal("slot.png"));
+        }
+    }
 
     public void draw(SpriteBatch batch, Vector2 startPos) {
         int i = 3;
