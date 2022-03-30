@@ -35,9 +35,6 @@ public class PlayerInputProcessor implements InputProcessor {
             case Keys.S:
                 player.setVerticalMovement(-1);
                 break;
-            case Keys.E:
-                player.toggleInventory();
-                break;
         }
         return true;
     }
@@ -66,8 +63,13 @@ public class PlayerInputProcessor implements InputProcessor {
     }
 
     public boolean touchDown(int x, int y, int pointer, int button) {
-        if (button != Input.Buttons.LEFT || pointer > 0) return false;
-        player.doAttack();
+        switch(button) {
+            case Input.Buttons.LEFT:
+                player.doAttack();
+                break;
+            default:
+                return false;
+        }
         return true;
     }
 
@@ -85,7 +87,8 @@ public class PlayerInputProcessor implements InputProcessor {
     }
 
     public boolean scrolled(float amountX, float amountY) {
-        return false;
+        player.scroll((int) amountY);
+        return true;
     }
 
 }

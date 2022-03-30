@@ -79,7 +79,7 @@ public class Character extends Entity {
     public void draw(SpriteBatch batch, Vector2 offset) {
         if(dead) return;
         super.draw(batch, offset);
-        if (equipped != null) {
+        if (equipped.getId() != 0) {
             drawEquipped(batch);
         }
     }
@@ -132,6 +132,7 @@ public class Character extends Entity {
 
     public void attack(Character c) {
         if(timer > 0 || dead) return;
+        if(equipped.getId() == 0) return;
         float damage = equipped.getValue("damage").asFloat();
         c.damage(damage);
         curSwingAngle = swingAngle;
@@ -186,6 +187,7 @@ public class Character extends Entity {
 
     public void setEquipped(Item pEquipped) {
         equipped = pEquipped;
+        if(equipped.getId() == 0) return;
         cooldown = equipped.getValue("cooldown").asFloat();
         reach = equipped.getInt("reach");
     }

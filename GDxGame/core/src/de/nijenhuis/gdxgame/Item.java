@@ -15,19 +15,17 @@ import com.badlogic.gdx.utils.JsonValue;
 public class Item {
 
     private Texture texture;
+    private int id;
     private String name;
     private String title;
     private JsonValue itemData;
 
     public Item(int pId) {
-        if (pId == 0) {
-            texture = new Texture(Gdx.files.internal("data/items/" + name + ".png"));
-        } else {
-            itemData = SaveMachine.loadValue("items/" + pId);
-            name = itemData.getString("name");
-            title = itemData.getString("title");
-            texture = new Texture(Gdx.files.internal("data/items/" + name + ".png"));
-        }
+        id = pId;
+        itemData = SaveMachine.loadValue("items/" + id);
+        name = itemData.getString("name");
+        title = itemData.getString("title");
+        texture = new Texture(Gdx.files.internal("data/items/" + name + ".png"));
     }
 
     public static Item nullItem() {
@@ -52,6 +50,10 @@ public class Item {
 
     public String getName() {
         return name;
+    }
+
+    public int getId() {
+        return id;
     }
 
 }

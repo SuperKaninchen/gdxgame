@@ -17,7 +17,7 @@
 			"type": 1,
 			"maxHealth": 200,
 			"speed": 300,
-			"equipped": 3
+			"equipped": 0
 		},
 		{
 			"id": 2,
